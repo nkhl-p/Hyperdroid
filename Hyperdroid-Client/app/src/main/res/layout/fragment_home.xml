@@ -4,8 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.hyperdroidclient.widgets.BaseTextView
+    <com.hyperdroidclient.widgets.BaseButton
+        android:id="@+id/bVnc"
+        android:text="VNC"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home Fragment" />
+        android:layout_height="wrap_content"
+        style="@style/BaseButton"/>
 </LinearLayout>

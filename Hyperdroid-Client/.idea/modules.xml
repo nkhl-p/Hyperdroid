@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Hyperdroid-Client.iml" filepath="$PROJECT_DIR$/Hyperdroid-Client.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.antlersoft.android.contentxml/com.antlersoft.android.contentxml.iml" filepath="$PROJECT_DIR$/com.antlersoft.android.contentxml/com.antlersoft.android.contentxml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.antlersoft.android.db/com.antlersoft.android.db.iml" filepath="$PROJECT_DIR$/com.antlersoft.android.db/com.antlersoft.android.db.iml" />
     </modules>
   </component>
 </project>
