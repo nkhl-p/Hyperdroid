@@ -1,16 +1,24 @@
 package com.hyperdroidclient.auth;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.hyperdroidclient.R;
 import com.hyperdroidclient.common.BaseActivity;
 import com.hyperdroidclient.dashboard.MainActivity;
@@ -32,6 +40,9 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
  */
 
 public class LoginActivity extends BaseActivity {
+
+    FirebaseAuth mAuth;
+
     EditText etEmailID;
     EditText etPassword;
     BaseButton bLogin;
@@ -47,12 +58,13 @@ public class LoginActivity extends BaseActivity {
             startActivity(i);
             finish();
         }
-
         setContentView(R.layout.activity_login);
         initViews();
     }
 
     private void initViews() {
+
+
         etEmailID = (EditText) findViewById(R.id.etEmailId);
         etPassword = (EditText) findViewById(R.id.etPassword);
         tvRegister = (BaseTextView) findViewById(R.id.tvRegister);
@@ -70,11 +82,14 @@ public class LoginActivity extends BaseActivity {
             public void onClick(View v) {
                 int check = validation();
                 if (check == 0) {
-                    new SharedPreferenceManager(getApplicationContext()).saveMainPage(1);
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(i);
-                    finish();
-                    //TODO do Login
+
+
+                    mAuth = FirebaseAuth.getInstance();
+
+                    String login_Email = etEmailID.getText().toString();
+                    String login_Password = etPassword.getText().toString();
+                    if(!TextUtils.isEmpty(login_Email) || !TextUtils.isEmpty(login_Password))
+                        login_User(login_Email,login_Password);
                 } else if (check == 1) {
                     etEmailID.setError("Email ID cannot be empty");
                     etEmailID.setFocusable(true);
@@ -149,4 +164,23 @@ public class LoginActivity extends BaseActivity {
                 .show();
     }
 
+    private void login_User(String login_email, String login_password) {
+        mAuth.signInWithEmailAndPassword( login_email , login_password ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if( task.isSuccessful())
+                {
+                    new SharedPreferenceManager(getApplicationContext()).saveMainPage(1);
+                    Intent mainIntent = new Intent(LoginActivity.this , MainActivity.class);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(mainIntent);
+                    finish();
+                }
+                else
+                {
+                    Toast.makeText(LoginActivity.this, "Invalid Email/Password Combination!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 }
