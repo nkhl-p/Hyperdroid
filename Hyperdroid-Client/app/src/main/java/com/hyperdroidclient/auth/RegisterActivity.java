@@ -1,12 +1,22 @@
 package com.hyperdroidclient.auth;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.hyperdroidclient.R;
 import com.hyperdroidclient.common.BaseActivity;
 import com.hyperdroidclient.dashboard.MainActivity;
@@ -14,6 +24,7 @@ import com.hyperdroidclient.data.local.SharedPreferenceManager;
 import com.hyperdroidclient.widgets.BaseButton;
 import com.hyperdroidclient.widgets.BaseTextView;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +33,10 @@ import java.util.regex.Pattern;
  */
 
 public class RegisterActivity extends BaseActivity {
+
+    FirebaseAuth mAuth;
+    DatabaseReference databaseReference;
+    int Temp;
     EditText etName, etEmailID, etPassword, etCPassword;
     BaseButton bRegister;
     BaseTextView tvLogin;
@@ -42,6 +57,9 @@ public class RegisterActivity extends BaseActivity {
     }
 
     private void initViews() {
+
+        mAuth = FirebaseAuth.getInstance();
+
         etName = (EditText) findViewById(R.id.etName);
         etEmailID = (EditText) findViewById(R.id.etEmailId);
         etPassword = (EditText) findViewById(R.id.etPassword);
@@ -63,11 +81,22 @@ public class RegisterActivity extends BaseActivity {
                 int check = validation();
                 if (check == 0) {
                     dismissProgressDialog();
-                    Toast.makeText(getApplicationContext(), "Registration Successful", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+
+                    String Display_Name = etName.getText().toString();
+                    String Email = etEmailID.getText().toString();
+                    String Password = etPassword.getText().toString();
+                    if ( !TextUtils.isEmpty(Display_Name) || !TextUtils.isEmpty(Email) || !TextUtils.isEmpty(Password) )
+                    {
+                        reg_user( Display_Name, Email, Password);
+                    }
+                    else
+                        Toast.makeText(RegisterActivity.this, "Details missing!!", Toast.LENGTH_SHORT).show();
+
+/*
+                    Intent i = new Intent(RegisterActivity.this, MainActivity.class);
                     startActivity(i);
                     finish();
-
+                    */
                     //TODO Network call to register user
                 } else if (check == 1) {
                     Toast.makeText(RegisterActivity.this, "Some fields are empty.", Toast.LENGTH_SHORT).show();
@@ -103,6 +132,42 @@ public class RegisterActivity extends BaseActivity {
 
         return 0;
 
+    }
+
+    private void reg_user(final String display_name, String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if( task.isSuccessful() )
+                {
+                    // Setting Up DataBase
+                    FirebaseUser current_user = mAuth.getInstance().getCurrentUser();
+                    String UUID = current_user.getUid();
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(UUID);
+                    HashMap<String , String> userMap = new HashMap<String, String>();
+                    userMap.put("Name" , display_name );
+                    userMap.put("Machine" , "default");
+                    databaseReference.setValue(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if( task.isComplete() )
+                            {
+                                Toast.makeText(getApplicationContext(), "Registration Successful", Toast.LENGTH_SHORT).show();
+                                Intent mainIntent = new Intent(RegisterActivity.this , MainActivity.class);
+                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(mainIntent);
+                                finish();
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    progressDialog.hide();
+                    Toast.makeText(RegisterActivity.this, "Cannot Register Deatails\nChech Details and Try Again" , Toast.LENGTH_SHORT);
+                }
+            }
+        });
     }
 
 }
