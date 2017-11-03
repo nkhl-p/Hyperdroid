@@ -5,10 +5,10 @@ package com.hyperdroidclient.com.antlersoft.android.drawing;
 
 import android.graphics.Rect;
 
+
 import com.hyperdroidclient.com.antlersoft.util.ObjectPool;
 
 import java.util.ArrayList;
-
 
 /**
  * A list of rectangular regions that together represent an area of interest.  Provides
@@ -25,7 +25,7 @@ import java.util.ArrayList;
  *
  */
 public class RectList {
-
+	
 	enum OverlapType {
 		NONE,
 		SAME,

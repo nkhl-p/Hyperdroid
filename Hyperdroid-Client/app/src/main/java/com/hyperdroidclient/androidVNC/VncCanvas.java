@@ -47,7 +47,6 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-
 import com.hyperdroidclient.com.antlersoft.android.bc.BCFactory;
 import com.hyperdroidclient.com.sun.jna.examples.unix.X11KeySymDef;
 import com.hyperdroidclient.com.sun.jna.examples.unix.XF86KeySymDef;

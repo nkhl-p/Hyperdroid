@@ -48,9 +48,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.antlersoft.android.zoomer.ZoomControls;
 import com.hyperdroidclient.R;
 import com.hyperdroidclient.com.antlersoft.android.bc.BCFactory;
-import com.hyperdroidclient.common.ZoomControls;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

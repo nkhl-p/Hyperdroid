@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-
 import com.hyperdroidclient.com.antlersoft.android.drawing.OverlappingCopy;
 import com.hyperdroidclient.com.antlersoft.android.drawing.RectList;
 import com.hyperdroidclient.com.antlersoft.util.ObjectPool;

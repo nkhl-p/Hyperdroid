@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import com.hyperdroidclient.com.antlersoft.util.ObjectPool;
 import com.hyperdroidclient.com.antlersoft.util.SafeObjectPool;
 
-
 public class OverlappingCopy
 {
 	private static SafeObjectPool<Rect> ocRectPool = new SafeObjectPool<Rect>() {

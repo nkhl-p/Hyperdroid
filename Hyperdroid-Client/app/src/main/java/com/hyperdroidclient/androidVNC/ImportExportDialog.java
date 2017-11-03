@@ -59,9 +59,13 @@ class ImportExportDialog extends Dialog {
 		setTitle(R.string.import_export_settings);
 		_textLoadUrl = (EditText)findViewById(R.id.textImportUrl);
 		_textSaveUrl = (EditText)findViewById(R.id.textExportPath);
-
-
-		File f = new File("vnc_settings.xml");
+		
+		File f = BCFactory.getInstance().getStorageContext().getExternalStorageDir(_configurationDialog, null);
+		// Sdcard not mounted; nothing else to do
+		if (f == null)
+			return;
+		
+		f = new File(f, "vnc_settings.xml");
 		
 		_textSaveUrl.setText(f.getAbsolutePath());
 		try {

@@ -10,6 +10,7 @@ import com.hyperdroidclient.com.antlersoft.android.bc.BCFactory;
 import com.hyperdroidclient.com.antlersoft.android.bc.IBCScaleGestureDetector;
 import com.hyperdroidclient.com.antlersoft.android.bc.OnScaleGestureListener;
 
+
 /**
  * An AbstractInputHandler that uses GestureDetector to detect standard gestures in touch events
  * 

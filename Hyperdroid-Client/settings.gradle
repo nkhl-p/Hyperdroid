@@ -1,1 +1,1 @@
-include ':app', ':com.antlersoft.android.db', ':com.antlersoft.android.contentxml'
+include ':app', ':zoomerWithKeys'
